@@ -158,3 +158,117 @@ Controllers **must stay lean**.
 **Put business logic in Services/Models, or face maintenance hell.**  
 
 **The demons of bad code await. Choose wisely.** 🔥👹
+
+
+
+# **🔥 5 SOUL-CRUSHING CONTROLLER MCQs**  
+*(Test your controller knowledge... if you can handle the truth.)*  
+
+---
+
+### **🔥 MCQ 1: The Forgotten Method**  
+You create a resource controller but forget to define `store()`. What happens when you `POST /demons`?  
+
+A) Laravel auto-generates the method  
+B) **404 Method Not Allowed** ✅  
+C) It silently fails  
+D) Magic `__call()` saves you  
+
+**💀 Explanation:**  
+- **✅ B)** Resource routes **strictly map** to controller methods. No `store()` = 404.  
+- **A/D)** Wrong – Laravel doesn’t write code for you (yet).  
+- **C)** Wrong – Laravel fails **loudly**, like a scorned demon.  
+
+---
+
+### **🔥 MCQ 2: The Validation Trap**  
+Your `store()` method lacks validation:  
+```php
+public function store(Request $request) {
+    Demon::create($request->all());
+}
+```  
+What’s the **worst-case scenario**?  
+
+A) **SQL injection** or corrupt data ✅  
+B) Just a PHP warning  
+C) Laravel auto-validates  
+D) The request is blocked by middleware  
+
+**💀 Explanation:**  
+- **✅ A)** `$request->all()` accepts **ANY input**, inviting chaos.  
+- **B)** Wrong – No warnings, just **silent data corruption**.  
+- **C/D)** Wrong – Laravel **doesn’t guess** your validation rules.  
+
+---
+
+### **🔥 MCQ 3: The Dependency Hell**  
+You type-hint a `DemonRepository` but get:  
+```bash
+Unresolvable dependency [DemonRepository]
+```  
+Why?  
+
+A) Forgot to **bind it in a Service Provider** ✅  
+B) PHP version mismatch  
+C) Misspelled `DemoonRepository`  
+D) Laravel doesn’t support DI  
+
+**💀 Explanation:**  
+- **✅ A)** Laravel **can’t magically resolve** interfaces without binding.  
+- **Fix:**  
+  ```php
+  // In AppServiceProvider.php
+  $this->app->bind(DemonRepository::class, EloquentDemonRepository::class);
+  ```  
+- **B/C/D)** Wrong – These would throw **different errors**.  
+
+---
+
+### **🔥 MCQ 4: The Fat Controller Sin**  
+Your `DemonController` has **800 lines of logic**. What’s the **biggest risk**?  
+
+A) **Untestable, unmaintainable code** ✅  
+B) Slower HTTP responses  
+C) Route caching fails  
+D) Autoloader crashes  
+
+**💀 Explanation:**  
+- **✅ A)** Fat controllers **violate SOLID principles** and become legacy nightmares.  
+- **Fix:** Move logic to **Services**, **Jobs**, or **Repositories**.  
+- **B/C/D)** Wrong – Performance issues are the **least of your worries**.  
+
+---
+
+### **🔥 MCQ 5: The Missing `__construct()`**  
+You add middleware to a controller but it **never runs**. Why?  
+
+A) Forgot to call `parent::__construct()` ✅  
+B) Middleware is spelled wrong  
+C) PHP 8.2+ required  
+D) Blade templates interfere  
+
+**💀 Explanation:**  
+- **✅ A)** Laravel’s base `Controller` **sets up middleware** in its constructor.  
+- **Fix:**  
+  ```php
+  public function __construct() {
+      parent::__construct();
+      $this->middleware('auth');
+  }
+  ```  
+- **B/C/D)** Wrong – These would throw **explicit errors**.  
+
+---
+
+### **🎯 FINAL REALITY CHECK**  
+Score your suffering:  
+- **0/5 Correct:** "You’re still putting logic in routes, aren’t you?"  
+- **2/5 Correct:** "At least you know `php artisan make:controller`."  
+- **4/5 Correct:** "You’ve felt the pain but survived."  
+- **5/5 Correct:** "Now go fix your team’s 2000-line controllers."  
+
+**Remember:** Controllers **should be thin**.  
+**If yours is obese, you’re doing it wrong.** 🔪🏋️♂️
+
+
